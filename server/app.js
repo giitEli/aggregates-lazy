@@ -66,7 +66,7 @@ app.get('/cats/:catId', async (req, res, next) => {
     /*
         STEP 2A: Find a cat with their associated toys
     */
-    const cat = {};
+    const cat = await Cat.findByPk(catId);
 
     const toys = cat.Toys;
 
@@ -75,6 +75,11 @@ app.get('/cats/:catId', async (req, res, next) => {
         associated with.
     */
     // const toyCount;
+    const toyCount = await Cat.count('toys', {
+        where: {
+            id: catId
+        }
+})
 
     // /*
     //     STEP 2C: Calculate the total price of all the toys that the cat is
@@ -90,8 +95,8 @@ app.get('/cats/:catId', async (req, res, next) => {
 
     res.json({
         toyCount,
-        toyTotalPrice,
-        toyAvgPrice,
+        // toyTotalPrice,
+        // toyAvgPrice,
         // STEP 3: Observe the difference between `...cat` and `...cat.toJSON()`
         ...cat.toJSON(),
     });
